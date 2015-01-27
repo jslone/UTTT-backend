@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: './frontend/dist',
 				src: ['**/*'],
-				dest: '.tmp/public'
+				dest: 'assets'
 			}]
 		}
 	});
