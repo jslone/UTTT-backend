@@ -28,7 +28,7 @@
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "postinstall": "cd frontend && npm install && cd .. && grunt"
+    "postinstall": "cd frontend && npm install && cd .. && grunt buildProd"
   },
   "main": "app.js",
   "repository": {
