@@ -11,6 +11,7 @@
     "include-all": "~0.1.3",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
+    "grunt-cli" : "~0.1.13",
     "grunt-sync": "~0.0.4",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-clean": "~0.5.0",
@@ -26,7 +27,8 @@
   },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+    "postInstall" : "./node_modules/.bin/grunt build"
   },
   "main": "app.js",
   "repository": {
