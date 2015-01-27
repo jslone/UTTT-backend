@@ -26,8 +26,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js",
-    "postinstall": "cd frontend && npm install && bower install && cd .."
+    "debug": "node debug app.js"
   },
   "main": "app.js",
   "repository": {
