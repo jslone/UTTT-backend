@@ -40,27 +40,29 @@ Game = (function() {
       options = null;
     }
     if (options === null) {
-      this.board = Utils.add((function() {
-        var _i, _results;
-        _results = [];
-        for (i = _i = 1; _i <= 9; i = ++_i) {
-          _results.push(Utils.add((function() {
-            var _j, _results1;
-            _results1 = [];
-            for (i = _j = 1; _j <= 9; i = ++_j) {
-              _results1.push({
-                t: ''
-              });
-            }
-            return _results1;
-          })(), {
-            t: ''
-          }));
-        }
-        return _results;
-      })(), {
-        t: ''
-      });
+      this.board = {
+        t: '',
+        d: (function() {
+          var _i, _results;
+          _results = [];
+          for (i = _i = 1; _i <= 9; i = ++_i) {
+            _results.push({
+              t: '',
+              d: (function() {
+                var _j, _results1;
+                _results1 = [];
+                for (i = _j = 1; _j <= 9; i = ++_j) {
+                  _results1.push({
+                    t: ''
+                  });
+                }
+                return _results1;
+              })()
+            });
+          }
+          return _results;
+        })()
+      };
       this.activeSub = -1;
       this.turn = 0;
       this.players = [
@@ -75,30 +77,33 @@ Game = (function() {
         }
       ];
     } else {
-      this.board = Utils.add((function() {
-        var _i, _len, _ref, _results;
-        _ref = options.board;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          sub = _ref[_i];
-          _results.push(Utils.add((function() {
-            var _j, _len1, _results1;
-            _results1 = [];
-            for (_j = 0, _len1 = sub.length; _j < _len1; _j++) {
-              i = sub[_j];
-              _results1.push({
-                t: i.t
-              });
-            }
-            return _results1;
-          })(), {
-            t: sub.t
-          }));
-        }
-        return _results;
-      })(), {
-        t: options.board.t
-      });
+      this.board = {
+        t: options.board.t,
+        d: (function() {
+          var _i, _len, _ref, _results;
+          _ref = options.board.d;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            sub = _ref[_i];
+            _results.push({
+              t: sub.t,
+              d: (function() {
+                var _j, _len1, _ref1, _results1;
+                _ref1 = sub.d;
+                _results1 = [];
+                for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                  i = _ref1[_j];
+                  _results1.push({
+                    t: i.t
+                  });
+                }
+                return _results1;
+              })()
+            });
+          }
+          return _results;
+        })()
+      };
       this.activeSub = options.activeSub;
       this.turn = options.turn;
       this.players = options.players;
@@ -111,14 +116,14 @@ Game = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       win = _ref[_i];
       i = win[0], j = win[1], k = win[2];
-      if (board[i].t !== '' && board[i].t !== 'C') {
-        if (board[i].t === board[j].t && board[i].t === board[k].t) {
-          return board[i].t;
+      if (board.d[i].t !== '' && board.d[i].t !== 'C') {
+        if (board.d[i].t === board.d[j].t && board.d[i].t === board.d[k].t) {
+          return board.d[i].t;
         }
       }
     }
     for (i = _j = 0; _j < 9; i = _j += 1) {
-      if (board[i].t === '') {
+      if (board.d[i].t === '') {
         return '';
       }
     }
@@ -126,7 +131,7 @@ Game = (function() {
   };
 
   Game.prototype.canMove = function(i, j, player) {
-    return player.id === this.players[this.turn].id && (i === this.activeSub || this.activeSub < 0) && this.board[i][j].t === '' && this.board.t === '';
+    return player.id === this.players[this.turn].id && (i === this.activeSub || this.activeSub < 0) && this.board.d[i].d[j].t === '' && this.board.t === '';
   };
 
   Game.prototype.move = function(i, j, player) {
@@ -134,9 +139,9 @@ Game = (function() {
       player = this.players[this.turn];
     }
     if (this.canMove(i, j, player)) {
-      this.board[i][j].t = player.t;
-      this.board[i].t = this.findWinner(this.board[i]);
-      this.activeSub = this.board[j].t === '' ? j : -1;
+      this.board.d[i].d[j].t = player.t;
+      this.board.d[i].t = this.findWinner(this.board.d[i]);
+      this.activeSub = this.board.d[j].t === '' ? j : -1;
       this.board.t = this.findWinner(this.board);
       this.turn = (this.turn + 1) % this.players.length;
       return true;
@@ -154,21 +159,23 @@ Game = (function() {
       return 1;
     } else if (board.t === other) {
       return 0;
-    } else if (Array.isArray(board)) {
+    } else if (board.d != null) {
       Pws = (function() {
-        var _i, _len, _results;
+        var _i, _len, _ref, _results;
+        _ref = board.d;
         _results = [];
-        for (_i = 0, _len = board.length; _i < _len; _i++) {
-          sub = board[_i];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          sub = _ref[_i];
           _results.push(this.rateBoard(sub, t));
         }
         return _results;
       }).call(this);
       Pls = (function() {
-        var _i, _len, _results;
+        var _i, _len, _ref, _results;
+        _ref = board.d;
         _results = [];
-        for (_i = 0, _len = board.length; _i < _len; _i++) {
-          sub = board[_i];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          sub = _ref[_i];
           _results.push(this.rateBoard(sub, other));
         }
         return _results;
@@ -192,7 +199,7 @@ Game = (function() {
   Game.prototype.open = function(_arg) {
     var i, j;
     i = _arg.i, j = _arg.j;
-    return this.board[i][j].t === '';
+    return this.board.d[i].d[j].t === '';
   };
 
   Game.prototype.filterOpen = function(moves) {

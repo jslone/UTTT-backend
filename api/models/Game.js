@@ -5,28 +5,27 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
-var board = [];
+var board = {d:[], t:''};
 for(var i = 0; i < 9; i++) {
-  board.push([]);
+  board.d[i] = {d:[],t:''};
   for(var j = 0; j < 9; j++) {
-    board[i].push({t:''});
+    board.d[i].d[j] = {t:''};
   }
-  board[i].t = '';
 }
 
 module.exports = {
 
   attributes: {
     board: {
-      type: 'array',
+      type: 'json',
       defaultsTo: board
     },
     activeSub: {
-      type: 'int',
+      type: 'integer',
       defaultsTo: -1
     },
     turn: {
-      type: 'int',
+      type: 'integer',
       defaultsTo: 0
     },
     players: {
