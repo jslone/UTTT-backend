@@ -5,7 +5,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-var UTTT = require('../../frontend/app/scripts/game.coffee');
+var UTTT = require('../game.coffee');
 
 module.exports = {
 

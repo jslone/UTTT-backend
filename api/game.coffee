@@ -1,0 +1,1 @@
+../frontend/app/scripts/game.coffee
